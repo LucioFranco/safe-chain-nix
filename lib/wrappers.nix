@@ -28,21 +28,35 @@ in
       name = "wrapped-${nodejs.name}";
       paths = [ nodejs ];
       postBuild = ''
-        # Replace package manager binaries with safe-chain wrappers
-        for bin in npm npx yarn pnpm pnpx bun bunx; do
-          if [ -e $out/bin/$bin ]; then
-            rm $out/bin/$bin
-          fi
-        done
-
-        # Link our wrapper scripts, passing the original binary paths
-        ln -sf ${mkBinWrapper "npm" "${nodejs}/bin/npm"} $out/bin/npm
-        ln -sf ${mkBinWrapper "npx" "${nodejs}/bin/npx"} $out/bin/npx
-        ln -sf ${mkBinWrapper "yarn" "${nodejs}/bin/yarn"} $out/bin/yarn
-        ln -sf ${mkBinWrapper "pnpm" "${nodejs}/bin/pnpm"} $out/bin/pnpm
-        ln -sf ${mkBinWrapper "pnpx" "${nodejs}/bin/pnpx"} $out/bin/pnpx
-        ln -sf ${mkBinWrapper "bun" "${nodejs}/bin/bun"} $out/bin/bun
-        ln -sf ${mkBinWrapper "bunx" "${nodejs}/bin/bunx"} $out/bin/bunx
+        # Only wrap binaries that actually exist in nodejs
+        if [ -e ${nodejs}/bin/npm ]; then
+          rm -f $out/bin/npm
+          ln -sf ${mkBinWrapper "npm" "${nodejs}/bin/npm"} $out/bin/npm
+        fi
+        if [ -e ${nodejs}/bin/npx ]; then
+          rm -f $out/bin/npx
+          ln -sf ${mkBinWrapper "npx" "${nodejs}/bin/npx"} $out/bin/npx
+        fi
+        if [ -e ${nodejs}/bin/yarn ]; then
+          rm -f $out/bin/yarn
+          ln -sf ${mkBinWrapper "yarn" "${nodejs}/bin/yarn"} $out/bin/yarn
+        fi
+        if [ -e ${nodejs}/bin/pnpm ]; then
+          rm -f $out/bin/pnpm
+          ln -sf ${mkBinWrapper "pnpm" "${nodejs}/bin/pnpm"} $out/bin/pnpm
+        fi
+        if [ -e ${nodejs}/bin/pnpx ]; then
+          rm -f $out/bin/pnpx
+          ln -sf ${mkBinWrapper "pnpx" "${nodejs}/bin/pnpx"} $out/bin/pnpx
+        fi
+        if [ -e ${nodejs}/bin/bun ]; then
+          rm -f $out/bin/bun
+          ln -sf ${mkBinWrapper "bun" "${nodejs}/bin/bun"} $out/bin/bun
+        fi
+        if [ -e ${nodejs}/bin/bunx ]; then
+          rm -f $out/bin/bunx
+          ln -sf ${mkBinWrapper "bunx" "${nodejs}/bin/bunx"} $out/bin/bunx
+        fi
       '';
     };
 

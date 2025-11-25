@@ -55,17 +55,7 @@
               (safeChain.wrapPython pkgs.python3)
             ];
             shellHook = ''
-              echo "=== Safe-chain TEST shell ==="
-              echo "This shell has safe-chain wrappers enabled for npm/pnpm/yarn/pip"
-              echo ""
-              echo "Wrapper version:"
-              npm --safe-chain-version 2>&1 || echo "  ERROR: --safe-chain-version failed"
-              echo ""
-              echo "Try these commands to test:"
-              echo "  npm --version"
-              echo "  npm help"
-              echo "  npm"
-              echo ""
+              echo "safe-chain test shell (wrappers active)"
             '';
           };
         };
