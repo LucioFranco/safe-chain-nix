@@ -66,16 +66,15 @@ in
       name = "wrapped-${python.name}";
       paths = [ python ];
       postBuild = ''
-        # Replace pip binaries with safe-chain wrappers
-        for bin in pip pip3; do
-          if [ -e $out/bin/$bin ]; then
-            rm $out/bin/$bin
-          fi
-        done
-
-        # Link our wrapper scripts, passing the original binary paths
-        ln -sf ${mkBinWrapper "pip" "${python}/bin/pip"} $out/bin/pip
-        ln -sf ${mkBinWrapper "pip3" "${python}/bin/pip3"} $out/bin/pip3
+        # Only wrap binaries that actually exist in python
+        if [ -e ${python}/bin/pip ]; then
+          rm -f $out/bin/pip
+          ln -sf ${mkBinWrapper "pip" "${python}/bin/pip"} $out/bin/pip
+        fi
+        if [ -e ${python}/bin/pip3 ]; then
+          rm -f $out/bin/pip3
+          ln -sf ${mkBinWrapper "pip3" "${python}/bin/pip3"} $out/bin/pip3
+        fi
       '';
     };
 }
